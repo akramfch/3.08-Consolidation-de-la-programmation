@@ -3,6 +3,8 @@ import math
 
 class Point:
     def __init__(self, x: float = 0, y: float = 0) -> None:
+        if not isinstance(x, (int, float)) or not isinstance(y, (int, float)):
+            raise TypeError("x et y doivent être des nombres")
         self.__x = x
         self.__y = y
 
@@ -58,28 +60,15 @@ class Cercle:
             return False
 
 class Rectangle:
-    def __init__(self, *args):
+    def __init__(self, pointInit: Point = Point(), longueur: float = 1, hauteur: float = 1, pointHautDroit : Point=None) -> None:
 
-        # Rectangle()
-        if len(args) == 0:
-            self.__pointInit = Point()
-            self.__longueur = 1
-            self.__hauteur = 1
-
-        # Rectangle(Point(...), longueur, hauteur)
-        elif len(args) == 3:
-            self.__pointInit = args[0]
-            self.__longueur = args[1]
-            self.__hauteur = args[2]
-
-        # Rectangle(Point bas-gauche, Point haut-droit)
-        elif len(args) == 2:
-            pointBasGauche = args[0]
-            pointHautDroit = args[1]
-
-            self.__pointInit = pointBasGauche
-            self.__longueur = pointHautDroit.get_x() - pointBasGauche.get_x()
-            self.__hauteur = pointHautDroit.get_y() - pointBasGauche.get_y()
+        self.__pointInit = pointInit
+        if pointHautDroit is None:
+            self.__longueur = longueur
+            self.__hauteur = hauteur
+        else:
+            self.__longueur = pointHautDroit.get_x() - pointInit.get_x()
+            self.__hauteur = pointHautDroit.get_y() - pointInit.get_y()
 
     def surface(self) -> float:
         return self.__longueur * self.__hauteur
@@ -105,8 +94,26 @@ class Rectangle:
         else:
             return False
 
+class triangle:
+    def __init__(self, cote1 : float, cote2 : float, angledroit : Point=Point()) -> None:
+        self.__cote1 = cote1
+        self.__cote2 = cote2
+        self.__angledroit = angledroit
 
+    def hypotenuse(self) -> float:
+        return  math.sqrt(math.pow(self.__cote1, 2) + math.pow(self.__cote2, 2))
 
+    def perimetretri(self) -> float:
+        return self.hypotenuse() + self.__cote1 + self.__cote2
+
+    def surfacetri(self) -> float:
+        return (self.__cote1 * self.__cote2) / 2
+
+    def isocele(self) -> bool:
+        if self.__cote1 == self.__cote2:
+            return True
+        else:
+            return False
 
 
 
